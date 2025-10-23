@@ -1,14 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\FacultyController;
-use App\Http\Controllers\StudentController;
-use App\Http\Controllers\CourseController;
-use App\Http\Controllers\DepartmentController;
-use App\Http\Controllers\AcademicYearController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\{
+    FacultyController,
+    StudentController,
+    CourseController,
+    DepartmentController,
+    AcademicYearController,
+    DashboardController,
+    ReportController,
+    AuthController
+};
 
 Route::post('/login', [AuthController::class, 'login']);
 

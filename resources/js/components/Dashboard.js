@@ -38,7 +38,7 @@ export default function Dashboard() {
       }
 
       const data = await res.json();
-      console.log("Stats received:", data); // debug
+      console.log("Stats received:", data);
       setStats(data);
     } catch (err) {
       console.error("Failed to load stats:", err);
@@ -49,31 +49,24 @@ export default function Dashboard() {
     fetchStats();
   }, []);
 
+  // 👇 Removed Academic Years from chart
   const chartData = {
-    labels: ["Students", "Faculties", "Departments", "Courses", "Academic Years"],
+    labels: ["Students", "Faculties", "Departments", "Courses"],
     datasets: [
       {
         label: "Total Count",
-        data: [
-          stats.students,
-          stats.faculties,
-          stats.departments,
-          stats.courses,
-          stats.academic_years,
-        ],
+        data: [stats.students, stats.faculties, stats.departments, stats.courses],
         backgroundColor: [
           "rgba(37, 99, 235, 0.7)",   // blue
           "rgba(22, 163, 74, 0.7)",   // green
           "rgba(147, 51, 234, 0.7)",  // purple
           "rgba(234, 179, 8, 0.7)",   // yellow
-          "rgba(219, 39, 119, 0.7)",  // pink
         ],
         borderColor: [
           "rgba(37, 99, 235, 1)",
           "rgba(22, 163, 74, 1)",
           "rgba(147, 51, 234, 1)",
           "rgba(234, 179, 8, 1)",
-          "rgba(219, 39, 119, 1)",
         ],
         borderWidth: 1,
       },
@@ -82,6 +75,7 @@ export default function Dashboard() {
 
   const chartOptions = {
     responsive: true,
+    maintainAspectRatio: false, // 👈 allows custom height
     plugins: {
       legend: {
         position: "top",
@@ -126,7 +120,10 @@ export default function Dashboard() {
       {/* Chart */}
       <div className="bg-white p-6 rounded shadow">
         <h2 className="text-xl font-semibold mb-4">Overview Chart</h2>
-        <Bar data={chartData} options={chartOptions} />
+        {/* 👇 Added a fixed smaller height */}
+        <div style={{ height: "250px" }}>
+          <Bar data={chartData} options={chartOptions} />
+        </div>
       </div>
     </div>
   );

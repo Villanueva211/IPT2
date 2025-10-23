@@ -9,6 +9,7 @@ function AcademicYears() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // ✅ Get token from localStorage
   const token = localStorage.getItem("token");
 
   // ✅ Fetch all academic years
@@ -21,6 +22,7 @@ function AcademicYears() {
       setAcademicYears(response.data);
     } catch (err) {
       console.error("Error fetching academic years:", err);
+      setError("Failed to load academic years.");
     } finally {
       setLoading(false);
     }
@@ -30,7 +32,7 @@ function AcademicYears() {
     fetchAcademicYears();
   }, []);
 
-  // ✅ Handle form submit (Add or Update)
+  // ✅ Handle Add / Update
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -58,7 +60,7 @@ function AcademicYears() {
       setEditingId(null);
       fetchAcademicYears();
     } catch (err) {
-      console.error("Error saving academic year:", err);
+      console.error("Error saving academic year:", err.response || err);
       setError("Failed to save academic year. Please try again.");
     }
   };
@@ -82,6 +84,7 @@ function AcademicYears() {
       fetchAcademicYears();
     } catch (err) {
       console.error("Error deleting academic year:", err);
+      setError("Failed to delete academic year.");
     }
   };
 

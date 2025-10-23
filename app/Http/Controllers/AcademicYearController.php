@@ -9,34 +9,45 @@ class AcademicYearController extends Controller
 {
     public function index()
     {
-        return response()->json(AcademicYear::orderBy('year','desc')->get());
+        return response()->json(AcademicYear::orderBy('id', 'desc')->get());
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'year' => 'required|string|max:50',
-            'semester' => 'required|string|max:100',
+            'year' => 'required|string|unique:academic_years,year',
         ]);
 
-        $ay = AcademicYear::create($validated);
-        return response()->json($ay, 201);
+        $academicYear = AcademicYear::create($validated);
+
+        return response()->json([
+            'message' => 'Academic year created successfully.',
+            'data' => $academicYear
+        ], 201);
+    }
+
+    public function show(AcademicYear $academicYear)
+    {
+        return response()->json($academicYear);
     }
 
     public function update(Request $request, AcademicYear $academicYear)
     {
         $validated = $request->validate([
-            'year' => 'required|string|max:50',
-            'semester' => 'required|string|max:100',
+            'year' => 'required|string|unique:academic_years,year,' . $academicYear->id,
         ]);
 
         $academicYear->update($validated);
-        return response()->json($academicYear);
+
+        return response()->json([
+            'message' => 'Academic year updated successfully.',
+            'data' => $academicYear
+        ]);
     }
 
     public function destroy(AcademicYear $academicYear)
     {
         $academicYear->delete();
-        return response()->json(null, 204);
+        return response()->json(['message' => 'Academic year deleted successfully.']);
     }
 }
