@@ -7,9 +7,13 @@ use Illuminate\Http\Request;
 
 class FacultyController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Faculty::with('department')->orderBy('name')->get());
+        $archived = $request->query('archived') === 'true';
+        $query = Faculty::with('department')->orderBy('name');
+
+        $query->where('status', $archived ? 'inactive' : 'active');
+        return response()->json($query->get());
     }
 
     public function store(Request $request)
@@ -24,11 +28,6 @@ class FacultyController extends Controller
 
         $faculty = Faculty::create($validated);
         return response()->json($faculty, 201);
-    }
-
-    public function show(Faculty $faculty)
-    {
-        return response()->json($faculty->load('department'));
     }
 
     public function update(Request $request, Faculty $faculty)
@@ -49,5 +48,13 @@ class FacultyController extends Controller
     {
         $faculty->delete();
         return response()->json(null, 204);
+    }
+
+    // ✅ Archive or Restore Faculty
+    public function archive(Faculty $faculty)
+    {
+        $faculty->status = $faculty->status === 'active' ? 'inactive' : 'active';
+        $faculty->save();
+        return response()->json(['message' => 'Status toggled', 'faculty' => $faculty]);
     }
 }

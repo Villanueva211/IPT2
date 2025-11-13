@@ -4,15 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
+            'email'    => 'required|email',
+            'password' => 'required',
         ]);
 
         if (!Auth::attempt($request->only('email', 'password'))) {
@@ -21,14 +20,20 @@ class AuthController extends Controller
 
         $user = Auth::user();
 
-        // Delete previous tokens
+        // Invalidate old tokens
         $user->tokens()->delete();
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        // ✅ Return explicit shape including avatar_url
         return response()->json([
-            'user' => $user,
-            'token' => $token
+            'user'  => [
+                'id'          => $user->id,
+                'name'        => $user->name,
+                'email'       => $user->email,
+                'avatar_url'  => $user->avatar_url, // comes from accessor in User model
+            ],
+            'token' => $token,
         ]);
     }
 
@@ -40,6 +45,14 @@ class AuthController extends Controller
 
     public function user(Request $request)
     {
-        return response()->json($request->user());
+        $u = $request->user();
+
+        // ✅ Explicitly include avatar_url for the sidebar/App.js fetch
+        return response()->json([
+            'id'          => $u->id,
+            'name'        => $u->name,
+            'email'       => $u->email,
+            'avatar_url'  => $u->avatar_url, // accessor in App\Models\User
+        ]);
     }
 }

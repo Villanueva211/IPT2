@@ -6,7 +6,6 @@ use App\Models\Student;
 use App\Models\Faculty;
 use App\Models\Department;
 use App\Models\Course;
-use App\Models\AcademicYear;
 
 class DashboardController extends Controller
 {
@@ -17,7 +16,6 @@ class DashboardController extends Controller
             'faculties' => Faculty::count(),
             'departments' => Department::count(),
             'courses' => Course::count(),
-            'academic_years' => AcademicYear::count(),
         ]);
     }
 }

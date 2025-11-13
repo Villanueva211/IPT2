@@ -34,32 +34,42 @@ function Login({ onLogin }) {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-96">
+    <div className="relative flex items-center justify-center h-screen overflow-hidden bg-gradient-to-br from-blue-600 via-indigo-500 to-cyan-400">
+      
+      {/* Animated background circles */}
+      <div className="absolute w-72 h-72 bg-blue-300 rounded-full blur-3xl opacity-30 top-10 left-10 animate-pulse"></div>
+      <div className="absolute w-72 h-72 bg-cyan-300 rounded-full blur-3xl opacity-30 bottom-10 right-10 animate-pulse"></div>
+
+      {/* Login Card */}
+      <div className="relative z-10 bg-white/80 backdrop-blur-xl p-8 rounded-2xl shadow-2xl w-96 border border-white/30">
         <h2 className="text-2xl font-bold mb-6 text-center text-blue-700">
           Admin Login
         </h2>
+
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+
         <form onSubmit={handleSubmit}>
           <input
             type="email"
             placeholder="Email"
-            className="w-full p-2 mb-4 border rounded"
+            className="w-full p-3 mb-4 rounded-lg bg-blue-50 border border-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+
           <input
             type="password"
             placeholder="Password"
-            className="w-full p-2 mb-4 border rounded"
+            className="w-full p-3 mb-6 rounded-lg bg-blue-50 border border-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+
           <button
             type="submit"
-            className="w-full bg-blue-700 text-white py-2 rounded hover:bg-blue-800 transition"
+            className="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2 rounded-lg transition-all"
           >
             Login
           </button>

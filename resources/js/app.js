@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import axios from "axios";
 
 // Components
@@ -15,11 +10,11 @@ import Faculty from "./components/Faculty";
 import Departments from "./components/Departments";
 import Courses from "./components/Courses";
 import AcademicYears from "./components/AcademicYears";
-import Reports from "./components/Reports";
 import Login from "./components/Login";
 import Sidebar from "./components/Sidebar";
+import Profile from "./components/Profile";
 
-// ✅ Laravel backend base URL
+// Laravel backend base URL
 axios.defaults.baseURL = "http://127.0.0.1:8000";
 axios.defaults.headers.common["Accept"] = "application/json";
 axios.defaults.withCredentials = true;
@@ -35,7 +30,6 @@ function App() {
         setLoading(false);
         return;
       }
-
       try {
         const res = await axios.get("/api/user", {
           headers: { Authorization: `Bearer ${token}` },
@@ -47,22 +41,16 @@ function App() {
       }
       setLoading(false);
     };
-
     checkUser();
   }, []);
 
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.post(
-        "/api/logout",
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-    } catch (error) {
-      console.error("Logout failed", error);
+      await axios.post("/api/logout", {}, { headers: { Authorization: `Bearer ${token}` } });
+    } catch (e) {
+      console.error("Logout failed", e);
     }
-
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
@@ -74,7 +62,7 @@ function App() {
   return (
     <Router>
       <div className="flex h-screen bg-gray-100">
-        <Sidebar onLogout={handleLogout} />
+        <Sidebar onLogout={handleLogout} user={user} />
         <div className="flex-1 p-8 overflow-y-auto">
           <Routes>
             <Route path="/" element={<Dashboard />} />
@@ -83,7 +71,7 @@ function App() {
             <Route path="/departments" element={<Departments />} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/academic-years" element={<AcademicYears />} />
-            <Route path="/reports" element={<Reports />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </div>

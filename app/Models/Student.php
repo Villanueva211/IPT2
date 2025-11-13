@@ -10,7 +10,12 @@ class Student extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'email', 'department_id', 'course_id', 'academic_year_id', 'status'
+        'name',
+        'email',
+        'department_id',
+        'course_id',
+        'academic_year_id',
+        'status', // ✅ this line is essential
     ];
 
     public function department()
@@ -25,6 +30,6 @@ class Student extends Model
 
     public function academicYear()
     {
-        return $this->belongsTo(AcademicYear::class, 'academic_year_id');
+        return $this->belongsTo(AcademicYear::class);
     }
 }
